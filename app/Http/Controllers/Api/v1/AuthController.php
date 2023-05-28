@@ -9,8 +9,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
+/**
+ * User authorization controller.
+ */
 class AuthController extends Controller
 {
+    /**
+     * Registers a new user.
+     *
+     * @param Request $request
+     *   Request object.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *   Json response.
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -20,7 +32,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), 400);
         }
 
         $user = new User();
@@ -32,6 +44,15 @@ class AuthController extends Controller
         return response()->json($user, 200);
     }
 
+    /**
+     * Authorises a user with credentials.
+     *
+     * @param LoginRequest $request
+     *   Request object.
+     *
+     * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Http\JsonResponse|null
+     *
+     */
     public function login(LoginRequest $request)
     {
         $validator = Validator::make($request->all(), [
@@ -40,7 +61,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 403);
+            return response()->json($validator->errors(), 400);
         }
 
         $auth_data = [
@@ -56,9 +77,15 @@ class AuthController extends Controller
             return $user;
         }
 
-        return response()->json(['message' => 'Error login credentials', 401]);
+        return response()->json(['message' => 'Error login credentials', 400]);
     }
 
+    /**
+     * Logs off a user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     *   Json response.
+     */
     public function logout()
     {
         $user = Auth::guard('api')->user();
