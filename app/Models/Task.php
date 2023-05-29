@@ -22,11 +22,17 @@ class Task extends Model
         'user_id',
     ];
 
+    /**
+     * Gets child tasks list.
+     */
     public function getChildList()
     {
         return $this->where('parent_id', $this->id)->get();
     }
 
+    /**
+     * Gets child tasks that not finished yet.
+     */
     public function getChildActiveList()
     {
         return $this->where('parent_id', $this->id)->where('status', self::STATUS_TODO)->get();
