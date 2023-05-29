@@ -53,7 +53,7 @@ class AuthController extends Controller
      * @return \Illuminate\Contracts\Auth\Authenticatable|\Illuminate\Http\JsonResponse|null
      *
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
